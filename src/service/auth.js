@@ -24,7 +24,6 @@ const checkAuth = async () => {
 
     const data = response.data;
     if (data ) {
-      console.log('Token verification response - ', data);
       return true;
     } else {
       console.log('Token verification response invalid');

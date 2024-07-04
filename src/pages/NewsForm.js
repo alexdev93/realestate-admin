@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import Cookies from 'js-cookie';
+import { useAppContext } from '../AppContext';
 import { TextField, Button, Grid, Typography, Container, CircularProgress, Backdrop } from '@mui/material';
 
 const NewsForm = () => {
+
+  const { createArticle } = useAppContext();
+
   const [formData, setFormData] = useState({
     title: '',
     content: '',
     releaseDate: '',
     author: '',
-    file: null, // to store the uploaded file
+    file: null,
   });
   const [loading, setLoading] = useState(false);
 
@@ -23,9 +26,7 @@ const NewsForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = Cookies.get('token');
-    setLoading(true); // Set loading to true when the form is submitted
-    try {
+   
       const formDataToSend = new FormData();
       formDataToSend.append('title', formData.title);
       formDataToSend.append('content', formData.content);
@@ -33,29 +34,8 @@ const NewsForm = () => {
       formDataToSend.append('author', formData.author);
       formDataToSend.append('file', formData.file);
 
-      const response = await fetch(`https://back-api-cvlq.onrender.com/api/news`, {
-        method: 'POST',
-        body: formDataToSend,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        }
-      });
-
-      if (!response.ok) {
-        alert('Failed to create news');
-        throw new Error('Failed to create news');
-      }
-
-      const news = await response.json();
-      console.log('Created news:', news);
-      alert('Created news');
-      // Optionally, redirect or show success message
-    } catch (error) {
-      console.error('Error creating news:', error);
-      // Handle error (show error message, etc.)
-    } finally {
-      setLoading(false); // Set loading to false when the request is complete
-    }
+     const res = await createArticle(formDataToSend);
+      setLoading(res);
   };
 
   return (

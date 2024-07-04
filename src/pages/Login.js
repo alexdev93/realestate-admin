@@ -20,13 +20,13 @@ const Login = () => {
 
       const response = await axios.post(`https://back-api-cvlq.onrender.com/api/auth/login`, { username, password });
       const token = response.data.token;
-      const expirationTimeInSeconds = 3600; // 1 hour in seconds
+      const expirationTimeInSeconds = 3600; 
       const expirationDate = new Date(new Date().getTime() + expirationTimeInSeconds * 1000);
       Cookies.set('token', token, { expires: expirationDate, secure: false, sameSite: 'Lax' }); 
       sessionStorage.setItem("token", token);
-      console.log('Login successful, token stored in cookies:', token);
+      console.log('Login successful, token stored in cookies:');
       setLoading(false);
-      navigate('/');
+      navigate('/create-news');
 
     } catch (err) {
       console.error('Login error:', err);
