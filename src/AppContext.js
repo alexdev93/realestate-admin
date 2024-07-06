@@ -7,7 +7,6 @@ const API_URL = process.env.REACT_APP_API_URL;
 const AppContext = createContext({});
 
 export const AppProvider = ({ children }) => {
-  const token = Cookies.get('token');
 
   const createArticle = async (formDataToSend) => {
     try {
@@ -15,7 +14,7 @@ export const AppProvider = ({ children }) => {
             method: 'POST',
             body: formDataToSend,
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${Cookies.get('token')}`,
             }
           });
     
@@ -41,7 +40,7 @@ const createHouse = async (formDataToSend) => {
     
     const response = await axios.post(`${API_URL}/houses`, formDataToSend, {
       headers: {
-        'Authorization': `Bearer ${token}`,
+        'Authorization': `Bearer ${Cookies.get('token')}`,
         'Content-Type': 'application/json'
       }
     });
