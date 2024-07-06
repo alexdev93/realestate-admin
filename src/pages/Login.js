@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -18,7 +20,7 @@ const Login = () => {
 
     try {
 
-      const response = await axios.post(`https://back-api-cvlq.onrender.com/api/auth/login`, { username, password });
+      const response = await axios.post(`${API_URL}/auth/login`, { username, password });
       const token = response.data.token;
       const expirationTimeInSeconds = 3600; 
       const expirationDate = new Date(new Date().getTime() + expirationTimeInSeconds * 1000);
@@ -26,7 +28,7 @@ const Login = () => {
       sessionStorage.setItem("token", token);
       console.log('Login successful, token stored in cookies:');
       setLoading(false);
-      navigate('/create-news');
+      navigate('/');
 
     } catch (err) {
       console.error('Login error:', err);

@@ -12,16 +12,17 @@ import { useAppContext } from '../AppContext';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
-const HouseForm = ({ onSubmit }) => {
-
+const HouseForm = () => {
     const { createHouse } = useAppContext();
+    const [loading, setLoading] = useState(false);
 
     const [formValues, setFormValues] = useState({
         location: '',
         price: '',
         releaseDate: null,
         details: '',
-        imagePath: '',
+        sellerName: '',
+        file: null, // To store the uploaded file
     });
 
     const handleChange = (e) => {
@@ -33,20 +34,26 @@ const HouseForm = ({ onSubmit }) => {
         setFormValues({ ...formValues, releaseDate: date });
     };
 
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        setFormValues({ ...formValues, file });
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        try{
+        setLoading(true)
+        try {
             const formDataToSend = new FormData();
-        formDataToSend.append('location', formValues.location);
-        formDataToSend.append('price', formValues.price);
-        formDataToSend.append('releaseDate', formValues.releaseDate);
-        formDataToSend.append('details', formValues.details);
-        formDataToSend.append('imagePath', formValues.imagePath);
+            formDataToSend.append('location', formValues.location);
+            formDataToSend.append('price', formValues.price);
+            formDataToSend.append('releaseDate', formValues.releaseDate);
+            formDataToSend.append('details', formValues.details);
+            formDataToSend.append('sellerName', formValues.sellerName);
+            formDataToSend.append('file', formValues.file); // Append the file
 
-        await createHouse(formDataToSend);
-        }catch(e){
-            throw Error(e);
+            await createHouse(formDataToSend).then(() => setLoading(false));
+        } catch (error) {
+            console.error('Error adding house:', error);
         }
     };
 
@@ -100,16 +107,29 @@ const HouseForm = ({ onSubmit }) => {
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
-                            name="imagePath"
-                            label="Image Path"
+                            name="sellerName"
+                            label="Seller Name"
                             fullWidth
-                            value={formValues.imagePath}
+                            value={formValues.sellerName}
                             onChange={handleChange}
                         />
                     </Grid>
                     <Grid item xs={12}>
-                        <Button type="submit" variant="contained" color="primary" fullWidth>
-                            Add House
+                        <input
+                            type="file"
+                            onChange={handleFileChange}
+                            accept=".jpg, .jpeg, .png" // Add accepted file types
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            type="submit"
+                            fullWidth
+                            disabled={loading}
+                        >
+                            {loading ? 'Submitting...' : 'Submit'}
                         </Button>
                     </Grid>
                 </Grid>

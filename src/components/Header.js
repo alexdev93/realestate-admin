@@ -22,7 +22,7 @@ const Header = () => {
   };
 
   const menuItems = [
-    { text: 'News', link: '/create-news' },
+    { text: 'News', link: '/' },
     { text: 'House', link: '/create-house' },
   ];
 

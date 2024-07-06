@@ -2,7 +2,7 @@ import React, { createContext, useContext } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 
-const SERVER_URL = 'https://back-api-cvlq.onrender.com';
+const API_URL = process.env.REACT_APP_API_URL;
 
 const AppContext = createContext({});
 
@@ -11,8 +11,7 @@ export const AppProvider = ({ children }) => {
 
   const createArticle = async (formDataToSend) => {
     try {
-        console.log(SERVER_URL);
-        const response = await fetch(`${SERVER_URL}/api/news`, {
+        const response = await fetch(`${API_URL}/news`, {
             method: 'POST',
             body: formDataToSend,
             headers: {
@@ -40,7 +39,7 @@ const createHouse = async (formDataToSend) => {
   try {
     console.log('FormDataToSend:', formDataToSend);
     
-    const response = await axios.post(`${SERVER_URL}/api/houses`, formDataToSend, {
+    const response = await axios.post(`${API_URL}/houses`, formDataToSend, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'

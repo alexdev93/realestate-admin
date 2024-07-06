@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAppContext } from '../AppContext';
-import { TextField, Button, Grid, Typography, Container, CircularProgress, Backdrop } from '@mui/material';
+import { TextField, Button, Grid, Typography, Container } from '@mui/material';
 
 const NewsForm = () => {
 
@@ -26,7 +26,7 @@ const NewsForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-   
+      setLoading(true)
       const formDataToSend = new FormData();
       formDataToSend.append('title', formData.title);
       formDataToSend.append('content', formData.content);
@@ -34,12 +34,12 @@ const NewsForm = () => {
       formDataToSend.append('author', formData.author);
       formDataToSend.append('file', formData.file);
 
-     const res = await createArticle(formDataToSend);
-      setLoading(res);
+      await createArticle(formDataToSend).then(() => setLoading(false));
+      
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" sx={{margin: 10}}>
       <Typography variant="h4" gutterBottom>
         Add News
       </Typography>
@@ -110,9 +110,6 @@ const NewsForm = () => {
           </Grid>
         </Grid>
       </form>
-      <Backdrop open={loading} style={{ zIndex: 1300 }}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
     </Container>
   );
 };

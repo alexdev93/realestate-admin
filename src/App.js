@@ -22,7 +22,7 @@ const App = () => {
             <Routes>
               <Route path="/login" element={<LoginPage />} />
               <Route
-                path="/create-news"
+                path="/"
                 element={
                   <ProtectedRoute>
                     <NewsForm />

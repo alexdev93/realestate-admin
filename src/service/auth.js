@@ -1,6 +1,7 @@
 import Cookies from 'js-cookie';
 import axios from 'axios';
 
+const API_URL = process.env.REACT_APP_API_URL;
 
 const checkAuth = async () => {
   const token = Cookies.get('token');
@@ -11,7 +12,7 @@ const checkAuth = async () => {
   }
 
   try {
-    const response = await axios.get(`https://back-api-cvlq.onrender.com/api/auth/verify`, {
+    const response = await axios.get(`${API_URL}/auth/verify`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
